@@ -2,9 +2,15 @@ package com.example.person.person.daoimpl;
 
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Map;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,46 +30,49 @@ public class PersonDaoImpl implements PersonDao{
 	private String getAllPersons = "select id, name, age, city, phone from persons";
 	private String getPerson = "select id, name, age, city, phone from persons where id=:id";
 	private String deletePerson = "delete from persons where id=:id";
-	
-	private String mappingUri = "http://10.11.178.247:8080/persons";
-//	@Autowired
-//	NamedParameterJdbcTemplate personTemplate;
+	private String updatePerson = "update persons set phone=:phone where id=:id";
 	
 	@Autowired
-	@Qualifier("restTemplate")
-	RestTemplate restTemplate;
+	NamedParameterJdbcTemplate personTemplate;
 	
 	@Override
-	public HttpStatus insertIntoDb(Person person) {
-		ResponseEntity<HttpStatus> response = restTemplate.postForEntity(mappingUri, person, HttpStatus.class);
-		return response.getBody();
-//		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-//		mapSqlParameterSource.addValue("name", person.getName());
-//		mapSqlParameterSource.addValue("age", person.getAge());
-//		mapSqlParameterSource.addValue("city", person.getCity());
-//		mapSqlParameterSource.addValue("phone", person.getPhone());
-//		personTemplate.update(insertQuery, mapSqlParameterSource);
+	public void insertIntoDb(Person person) {
+		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+		mapSqlParameterSource.addValue("name", person.getName());
+		mapSqlParameterSource.addValue("age", person.getAge());
+		mapSqlParameterSource.addValue("city", person.getCity());
+		mapSqlParameterSource.addValue("phone", person.getPhone());
+		personTemplate.update(insertQuery, mapSqlParameterSource);
 	}
 
-	@Override
-	public List<Person> getPersonsFromDb() {
-		return Arrays.asList(restTemplate.getForObject(mappingUri, Person[].class)); //personTemplate.query(getAllPersons, new PersonMapper());
-	}
+//	@Override
+//	public void getPersonsFromDb() {
+//		 personTemplate.query(getAllPersons, new PersonMapper());
+//	}
 
-	@Override
-	public Person getPersonFromDb(int id) {
+//	@Override
+//	public void getPersonFromDb(int id) {
 //		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
 //		mapSqlParameterSource.addValue("id", id);
-		//personTemplate.queryForObject(getPerson,mapSqlParameterSource, new PersonMapper());
-		return restTemplate.getForObject(mappingUri + "/{ id }", Person.class, id);
-		
-	}
+//		personTemplate.queryForObject(getPerson,mapSqlParameterSource, new PersonMapper());
+//		
+//		
+//	}
 
-	@Override
-	public void deleteFromDb(int id) {
+//	@Override
+//	public void deleteFromDb(int id) {
 //	 MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
 //	 mapSqlParameterSource.addValue("id", id);
-	 //personTemplate.update(deletePerson, mapSqlParameterSource);
-	  restTemplate.delete(mappingUri + "/{ id }", id);
-	}
+//	 personTemplate.update(deletePerson, mapSqlParameterSource);
+//	 	  
+//	}
+//	
+//	@Override
+//	public void updatePersonInDb(int id,long phone) {
+//		Person person = new Person();
+//		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+//		mapSqlParameterSource.addValue("id", person.getId());
+//		mapSqlParameterSource.addValue("phone", person.getPhone());
+//		personTemplate.update(updatePerson, mapSqlParameterSource);
+//	}
 }

@@ -9,8 +9,10 @@ import com.example.person.person.model.Person;
 
 public interface PersonDao {
 
-	HttpStatus insertIntoDb(Person person);
-	List<Person> getPersonsFromDb();
-	Person getPersonFromDb(int id);
-	void deleteFromDb(int id);
+	void insertIntoDb(Person person);
+//	void getPersonsFromDb();
+//	void getPersonFromDb(int id);
+//	void deleteFromDb(int id);
+//	void updatePersonInDb(int id, long phone);
+//	void insertIntoClientDb(Person person);
 }

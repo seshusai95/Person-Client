@@ -11,5 +11,6 @@ public interface PersonService {
 	HttpStatus insertIntoPersonDao(Person person);
 	List<Person> getPersonsFromDao();
 	Person getPersonFromDao(int id);
-	void deletePersonFromDao(int id);
+	HttpStatus deletePersonFromDao(int id);
+	Person updatePersonFromDao(int id, long phone);
 }
